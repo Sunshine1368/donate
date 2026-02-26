@@ -1,0 +1,44 @@
+# 透明液态玻璃风格捐赠页面
+
+这是一个为 [toolkit.uno/donate](https://toolkit.uno/donate) 设计的捐赠页面项目。它包含一个具有液态玻璃美学的前端和一个简单的 Flask 后端，支持通过微信二维码接收捐赠。
+
+## 功能特性
+- 🎨 **透明液态玻璃UI**：毛玻璃效果、柔和光影、动态气泡背景。
+- 💳 **预设金额**：5、10、20、50、100 美元选项，无自定义输入。
+- 📱 **微信支付集成**：点击捐赠按钮后，动态生成包含金额信息的微信支付二维码。
+- 🐳 **Docker 支持**：一键容器化部署。
+- 🌐 **指定路由**：页面可通过 `https://toolkit.uno/donate` 访问。
+
+## 快速开始
+
+### 本地运行（开发模式）
+1. 克隆仓库：`git clone <your-repo-url>`
+2. 进入目录：`cd donate-site`
+3. 安装依赖：`pip install -r requirements.txt`
+4. 运行应用：`python app.py`
+5. 访问：`http://localhost:5000/donate`
+
+### 使用 Docker 运行
+1. 构建镜像：`docker build -t donate-site .`
+2. 运行容器：`docker run -p 5000:5000 donate-site`
+3. 访问：`http://localhost:5000/donate`
+
+### 生产环境部署
+- 建议使用 `gunicorn` 作为 WSGI 服务器（已包含在依赖中）。
+- 设置环境变量 `PORT` 自定义端口（默认 5000）。
+- 可配合 Nginx 反向代理处理静态文件和 SSL。
+
+## 项目配置
+- **金额预设**：在 `templates/donate.html` 的 `amount-grid` 中修改按钮值。
+- **微信支付集成**：当前使用模拟的 `qr_data`。要接入真实微信支付，需修改 `/api/donate` 接口，调用微信支付 Native API 获取 `code_url` 并返回给前端。
+- **数据持久化**：当前捐赠记录存储在内存列表 `donations` 中，重启即丢失。如需持久化，请集成数据库（如 SQLite, PostgreSQL）。
+
+## API 接口
+- `GET /donate` - 返回捐赠页面
+- `POST /api/donate` - 提交捐赠金额，返回支付二维码数据
+  - 请求体：`{"amount": 20}`
+  - 响应：`{"success": true, "qr_data": "weixin://...", "amount": 20}`
+- `GET /api/health` - 健康检查
+
+## 许可证
+[MIT](LICENSE)
