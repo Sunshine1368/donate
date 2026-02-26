@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>液态玻璃 · 捐赠 · toolkit.uno/donate</title>
+    <title>你的捐赠是我们运营下去的动力</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -168,9 +168,37 @@
             font-weight: 650;
         }
 
-        /* 自定义金额区域已移除，无需显示 */
-        .custom-field {
-            display: none;
+        /* 名称输入区域 */
+        .name-field {
+            margin-bottom: 2rem;
+        }
+        .name-field label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #1f4357;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .name-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            color: #0a2636;
+            backdrop-filter: blur(4px);
+            outline: none;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .name-input:focus {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5), inset 0 0 8px rgba(255,255,255,0.6);
         }
 
         .donate-primary {
@@ -256,6 +284,60 @@
             color: #1d4a60;
         }
 
+        /* 捐赠名单区域 */
+        .donation-list {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border-radius: 30px;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .donation-list h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #1e4a62;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .donation-items {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        .donation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.95rem;
+        }
+        .donation-item:last-child {
+            border-bottom: none;
+        }
+        .donor-name {
+            font-weight: 500;
+            color: #0f3448;
+        }
+        .donor-amount {
+            font-weight: 600;
+            color: #1f5e7a;
+        }
+        .donor-time {
+            font-size: 0.75rem;
+            color: rgba(30, 70, 90, 0.7);
+            margin-left: 0.5rem;
+        }
+        .empty-list {
+            text-align: center;
+            color: rgba(30, 70, 90, 0.6);
+            padding: 1rem 0;
+            font-style: italic;
+        }
+
         .droplet {
             position: absolute;
             background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), transparent 70%);
@@ -318,33 +400,47 @@
     <div class="droplet droplet-2"></div>
 
     <main class="glass-card">
-        <h1>✨ 润物无声</h1>
-        <div class="subhead">选择金额，使用微信扫码完成捐赠</div>
+        <h1>--------润物无声--------</h1>
+        <div class="subhead">留下您的名字，让善意有迹可循</div>
         
-        <!-- 预设金额选项（无自定义输入框） -->
+        <!-- 预设金额选项 -->
         <div class="amount-grid" id="amountPresets">
-            <button class="amount-btn" data-amount="5">$5</button>
-            <button class="amount-btn" data-amount="10">$10</button>
-            <button class="amount-btn" data-amount="20">$20</button>
-            <button class="amount-btn" data-amount="50">$50</button>
-            <button class="amount-btn" data-amount="100">$100</button>
+            <button class="amount-btn" data-amount="5">￥5</button>
+            <button class="amount-btn" data-amount="10">￥10</button>
+            <button class="amount-btn" data-amount="20">￥20</button>
+            <button class="amount-btn" data-amount="50">￥50</button>
+            <button class="amount-btn" data-amount="100">￥100</button>
+        </div>
+
+        <!-- 捐赠者名称输入，默认“无名好心人” -->
+        <div class="name-field">
+            <label for="donorName">您的称呼</label>
+            <input type="text" id="donorName" class="name-input" value="无名好心人" placeholder="输入您的名字或昵称">
         </div>
 
         <!-- 捐赠按钮 -->
         <button class="donate-primary" id="donateBtn">
-            <span>⚡</span> 获取微信支付码 <span>⚡</span>
+            <span></span> 获取微信支付码 <span></span>
         </button>
 
-        <!-- 微信支付二维码区域（从静态目录加载对应金额图片） -->
+        <!-- 微信支付二维码区域 -->
         <div class="wechat-pay-area">
             <div class="wechat-qr-wrapper">
                 <img class="wechat-qr" 
-                     src="/static/qr_codes/20.png"  <!-- 默认显示20元二维码 -->
+                     src="/donate-static/qr_codes/20.png" 
                      alt="微信支付二维码"
                      id="wechatQRImage">
-                <p id="qrAmountLabel">🌸 当前金额: $20</p>
+                <p id="qrAmountLabel">当前金额: ￥20</p>
             </div>
             <small>长按保存二维码，使用微信扫一扫</small>
+        </div>
+
+        <!-- 捐赠名单 -->
+        <div class="donation-list">
+            <h3>最近捐赠 · 感谢大家</h3>
+            <div class="donation-items" id="donationItems">
+                <div class="empty-list">加载中...</div>
+            </div>
         </div>
     </main>
 
@@ -353,52 +449,116 @@
         const donateBtn = document.getElementById('donateBtn');
         const wechatQR = document.getElementById('wechatQRImage');
         const qrLabel = document.getElementById('qrAmountLabel');
+        const donorNameInput = document.getElementById('donorName');
+        const donationItemsDiv = document.getElementById('donationItems');
         
         let selectedAmount = 20; // 默认选中金额
 
-        // 预设按钮点击：更新高亮、selectedAmount、二维码图片和标签
+        // 加载捐赠名单
+        async function loadDonations() {
+            try {
+                const response = await fetch('/api/donations');
+                if (response.ok) {
+                    const data = await response.json();
+                    renderDonations(data.donations);
+                } else {
+                    donationItemsDiv.innerHTML = '<div class="empty-list">暂无捐赠记录</div>';
+                }
+            } catch (error) {
+                donationItemsDiv.innerHTML = '<div class="empty-list">加载失败</div>';
+            }
+        }
+
+        // 渲染捐赠名单
+        function renderDonations(donations) {
+            if (!donations || donations.length === 0) {
+                donationItemsDiv.innerHTML = '<div class="empty-list">还没有捐赠，来做第一个吧 ✨</div>';
+                return;
+            }
+            let html = '';
+            donations.forEach(d => {
+                const timeStr = new Date(d.timestamp).toLocaleString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                html += `
+                    <div class="donation-item">
+                        <span class="donor-name">${escapeHtml(d.name)}</span>
+                        <span>
+                            <span class="donor-amount">￥${d.amount}</span>
+                            <span class="donor-time">${timeStr}</span>
+                        </span>
+                    </div>
+                `;
+            });
+            donationItemsDiv.innerHTML = html;
+        }
+
+        // 简单的防XSS
+        function escapeHtml(unsafe) {
+            return unsafe.replace(/[&<>"]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                if(m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        // 预设按钮点击
         presetButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 presetButtons.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 selectedAmount = parseFloat(this.dataset.amount);
-                
-                // 更新二维码图片为对应金额的静态文件
-                wechatQR.src = `/static/qr_codes/${selectedAmount}.png?t=${new Date().getTime()}`; // 加时间戳避免缓存
-                qrLabel.innerText = `🌸 当前金额: $${selectedAmount}`;
+                wechatQR.src = `/donate-static/qr_codes/${selectedAmount}.png?t=${Date.now()}`;
+                qrLabel.innerText = `当前金额: ￥${selectedAmount}`;
             });
         });
 
-        // 捐赠按钮：记录捐赠（可选），并提醒用户直接扫码
+        // 捐赠按钮：提交捐赠记录（名称+金额）
         donateBtn.addEventListener('click', async function() {
             if (!selectedAmount) {
                 alert('请先选择一个金额');
                 return;
             }
-            
-            // 可选：调用后端API记录捐赠（不改变二维码，因为已静态）
+            let donorName = donorNameInput.value.trim();
+            if (donorName === '') {
+                donorName = '无名好心人'; // 如果清空则使用默认
+            }
+
+            donateBtn.disabled = true;
+            donateBtn.innerText = '处理中...';
+
             try {
                 const response = await fetch('/api/donate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: selectedAmount })
+                    body: JSON.stringify({ 
+                        name: donorName,
+                        amount: selectedAmount 
+                    })
                 });
                 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(`✅ 捐赠请求已记录，请直接扫描上方二维码支付 $${selectedAmount}`);
+                    alert(`捐赠请求已记录，请扫描上方二维码支付 ￥${selectedAmount}，感谢您！`);
+                    // 刷新捐赠名单
+                    loadDonations();
                 } else {
-                    // 即使API失败，也不影响扫码支付
-                    alert(`请扫描上方二维码支付 $${selectedAmount}`);
+                    alert('提交失败，但您仍可扫码支付');
                 }
             } catch (error) {
-                // 网络错误时仍允许扫码
-                alert(`请扫描上方二维码支付 $${selectedAmount}`);
+                alert('网络错误，请直接扫码支付');
+            } finally {
+                donateBtn.disabled = false;
+                donateBtn.innerText = '获取微信支付码';
             }
         });
 
-        // 默认高亮20元按钮
+        // 默认高亮20元按钮，并加载捐赠名单
         document.querySelector('.amount-btn[data-amount="20"]').classList.add('active');
+        loadDonations();
+
+        // 每30秒刷新一次捐赠名单（可选）
+        setInterval(loadDonations, 30000);
     </script>
 </body>
 </html>
